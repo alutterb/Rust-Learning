@@ -25,7 +25,7 @@ fn walk(location: &mut Vec<Vec<i32>>, direction: Direction, coordinates: [i32; 2
     let y = coordinates[1] + arr[1];
 
 
-    if x > boundi || y > boundi || x < 0 || y < 0{ // oob checking
+    if x >= boundi || y >= boundi || x < 0 || y < 0 { // oob checking
         Err("Direction is out of bounds.")
     } else {
         // need to update to usize for indexing
@@ -50,7 +50,7 @@ fn walk_result(location: &mut Vec<Vec<i32>>, direction: Direction, coordinates: 
 }
 
 pub fn begin_adventure() {
-    let n = 100; // size of our dynamic array
+    let n = 10; // size of our dynamic array
     let mut array: Vec<Vec<i32>> = vec![vec![0;n]; n]; // define n x n dynamic array, initializes values at 0
     // provide current location coordinates
     let mut coordinates: [i32; 2] = [2, 1];
@@ -65,20 +65,16 @@ pub fn begin_adventure() {
         let number: f32 = rng.gen();
 
         // assing direction to move - equal chance to move any direction
-        let mut direction = Direction::Up; // default to Up
-        if 0.0 < number && number < 0.25 {
-            direction = Direction::Up;
-        }
-        else if 0.25 < number && number < 0.5 {
-            direction = Direction::Down;
-        }
-        else if 0.5 < number && number < 0.75 {
-            direction = Direction::Left;
-        }
-        else {
-            direction = Direction::Right;
-        }
-
+        let direction = if number < 0.25 {
+            Direction::Up
+        } else if number < 0.5 {
+            Direction::Down
+        } else if number < 0.75 {
+            Direction::Left
+        } else {
+            Direction::Right
+        };
+        
         let (x, y) = walk_result(&mut array, direction, coordinates);
         coordinates = [x, y];
         iters -= 1;
@@ -86,4 +82,5 @@ pub fn begin_adventure() {
 
     println!("Origin: ({}, {})", 2, 1);
     println!("Final Destination: ({}, {})", coordinates[0], coordinates[1]);
+    println!("Location matrix: {:?}", array);
 }
