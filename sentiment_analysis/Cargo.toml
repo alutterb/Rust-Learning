@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 ndarray = "0.15"
-tokenizers = "0.12"
+tokenizers = "0.15.0"
 
