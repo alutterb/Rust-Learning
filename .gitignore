@@ -14,4 +14,5 @@ Cargo.lock
 *.pdb
 
 sentiment_analysis/data/glove.6B
+sentiment_analysis/data/training
 

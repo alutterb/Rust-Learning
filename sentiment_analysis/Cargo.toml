@@ -9,5 +9,7 @@ edition = "2021"
 ndarray = "0.15"
 tokenizers = "0.15.0"
 finalfusion = "0.18.0"
+csv = "1.1"
+serde = { version = "1.0", features = ["derive"]}
 
 
