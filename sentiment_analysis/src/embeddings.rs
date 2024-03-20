@@ -19,6 +19,8 @@ pub fn load_glove_embeddings(embedding_path: &str) -> Result<HashMap<String, Arr
     let file = File::open(embedding_path)?;
     let reader = BufReader::new(file);
 
+    // store embeddings as a dictionary where the key is the word and the value is the 
+    // vector embedding representation
     let mut embeddings = HashMap::new();
 
     for line in reader.lines() {

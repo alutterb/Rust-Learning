@@ -29,7 +29,7 @@ pub fn generate_model_input(tokens: Vec<String>, embeddings: HashMap<String, Arr
 
     let mut aggregated_embeddings = if let Some(first_token) = tokens.get(0) {
         if let Some(embedding) = embeddings.get(first_token) {
-            // succes - token existed and there was an embedding for it
+            // success - token existed and there was an embedding for it
             Array1::<f64>::zeros(embedding.dim())
         } else {
             // otherwise, we use a default embedding dim

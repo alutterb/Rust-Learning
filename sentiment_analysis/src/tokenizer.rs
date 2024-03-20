@@ -7,6 +7,7 @@ use std::fs;
 fn read_txt_file(file_path: &str) -> String {
     let file_contents = match fs::read_to_string(file_path) {
         Ok(contents) => contents,
+        // note - panic! doesn't return a value and is therefore not relevant to the fcns return type
         Err(e) => panic!("Error reading file {}: {}", file_path, e)
     };
 
