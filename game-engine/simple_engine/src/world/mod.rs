@@ -1,3 +1,5 @@
+use std::io::{self, Write};
+
 #[derive(Debug)]
 struct Grid<Tile> {
     width: usize,
@@ -47,7 +49,7 @@ struct Tile {
     position: (usize, usize)
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug,Clone,PartialEq)]
 enum TileType {
     Wall,
     Floor,
@@ -66,6 +68,15 @@ enum EntityType {
     Player,
     Monster,
     Item
+}
+
+#[derive(Debug)]
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+
 }
 
 //-------
@@ -123,7 +134,72 @@ impl World {
         }
     }
 
-    pub fn update(&mut self) {
-        // update game entities and world state
+    pub fn start_game_loop(&mut self) {
+        let stdin = io::stdin();
+        let mut input = String::new();
+
+        loop {
+            println!("Enter move (WASD): ");
+            io::stdout().flush().unwrap();
+            stdin.read_line(&mut input).unwrap();
+
+            let direction = match input.trim() {
+                "w" => Direction::Up,
+                "a" => Direction::Left,
+                "s" => Direction::Down,
+                "d" => Direction::Right,
+                _ => { println!("Invalid input, defaulting to up");
+                    Direction::Up
+                }
+            };
+            self.update(&direction);
+            input.clear();
+        }
     }
+
+    fn update(&mut self, direction: &Direction) {
+        // update game entities and world state
+        for i in 0..self.entities.len() {
+            match self.entities[i].entity_type {
+                EntityType::Player => {
+                    let (new_x, new_y) = self.determine_new_position(self.entities[i].position, direction);
+
+                    if let Some(tile) = self.dungeon.tiles.get(new_x, new_y) {
+                        if tile.tile_type == TileType::Floor {
+                            self.entities[i].position = (new_x, new_y);
+                            println!("Player moved to {:?}", self.entities[i].position);
+                        }
+                    }
+                }
+                EntityType::Monster => {
+                    // monster logic
+                }
+                EntityType::Item => {
+                    // item logic
+                }
+            }
+        }
+    }
+
+    fn determine_new_position(&self, position: (usize, usize), direction: &Direction) -> (usize, usize) {
+        match direction {
+            Direction::Up => {
+                (position.0, position.1 + 1)
+            }
+            Direction::Down => {
+                (position.0, position.1 - 1)
+            }
+            Direction::Left => {
+                (position.0 - 1, position.1)
+            }
+            Direction::Right => {
+                (position.0 + 1, position.1)
+            }
+        }
+    }
+
+    fn handle_interactions(&self) {
+        // handle interactions between entities
+    }
+
 }
